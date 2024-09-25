@@ -1,0 +1,95 @@
+@page
+@model InventoryManagementSystem.Pages.Sales.IndexModel
+
+@{
+    ViewData["Title"] = "Sales";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="productId">Product</label>
+        <select id="productId" name="ProductId" class="form-control">
+            @if (Model.Products.Any())
+            {
+                @foreach (var product in Model.Products)
+                {
+                    <option value="@product.Id">@product.Name</option>
+                }
+            }
+            else
+            {
+                <option value="">No products available</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="quantity">Quantity</label>
+        <input type="number" id="quantity" name="Quantity" class="form-control" min="1" />
+    </div>
+    <button type="submit" class="btn btn-primary">Sell</button>
+</form>
+
+@if (Model.SaleSuccess)
+{
+    <h2>Sale Completed</h2>
+    <p>Product: @Model.Sale.Product?.Name</p>
+    <p>Quantity: @Model.Sale.Quantity</p>
+    <p>Amount: @Model.Sale.TotalAmount.ToString("KSh #,0")</p>
+}
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger">
+        @Model.ErrorMessage
+    </div>
+}
+
+@if (Model.LowStockProducts.Any())
+{
+    <div class="alert alert-warning">
+        <strong>Notification:</strong> The following products are out of stock:
+        <ul>
+        @foreach (var product in Model.LowStockProducts)
+        {
+            <li>@product.Name</li>
+        }
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+     
+}
+
+
+<h2><a asp-page="./SalesHistory">Sales History</a></h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+    @if (Model.Sales.Any())
+    {
+        @foreach (var sale in Model.Sales)
+        {
+            <tr>
+                <td>@sale.Date.ToString("d")</td>
+                <td>@sale.Product?.Name</td>
+                <td>@sale.Quantity</td>
+                <td>@sale.TotalAmount.ToString("KSh #,0")</td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan="4">No sales found</td>
+        </tr>
+    }
+    </tbody>
+</table>

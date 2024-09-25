@@ -1,0 +1,48 @@
+@page
+@model InventoryManagementSystem.Pages.Products.DetailsModel
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<h1>Product Details</h1>
+
+@if (Model.Product != null)
+{
+    <div>
+        <dl class="row">
+            <dt class="col-sm-2">
+                Product Name
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Product.Name
+            </dd>
+            <dt class="col-sm-2">
+                Description
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Product.Description
+            </dd>
+            <dt class="col-sm-2">
+                Price
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Product.Price
+            </dd>
+            <dt class="col-sm-2">
+                Quantity
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Product.Quantity
+            </dd>
+            <!-- Add more fields as necessary -->
+        </dl>
+    </div>
+    <div>
+        <a asp-page="./Edit" asp-route-id="@Model.Product.Id" class="btn btn-primary">Edit</a>
+        <a asp-page="./Index" class="btn btn-secondary">Back to List</a>
+    </div>
+}
+else
+{
+    <p>Product not found.</p>
+}

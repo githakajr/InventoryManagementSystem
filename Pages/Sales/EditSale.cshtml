@@ -1,0 +1,54 @@
+@page "{id:int}"
+@model InventoryManagementSystem.Pages.Sales.EditSaleModel
+
+@{
+    ViewData["Title"] = "Edit Sale";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="post">
+    <div>
+        <label for="productId">Product</label>
+        <select id="productId" asp-for="Sale!.ProductId" class="form-control">
+            @foreach (var product in Model.Products)
+            {
+<option value="@product.Id" selected="@(product.Id == Model.Sale?.ProductId ? "selected" : null)">
+    @product.Name
+</option>
+
+            }
+        </select>
+    </div>
+
+    <div>
+        <label for="quantity">Quantity</label>
+        <input type="number" id="quantity" asp-for="Sale!.Quantity" min="1" class="form-control" />
+    </div>
+
+    <div>
+        <label for="totalAmount">Amount (Ksh)</label>
+        <input type="text" id="totalAmount" asp-for="Sale!.TotalAmount" class="form-control" readonly />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+<a asp-page="SalesHistory" class="btn btn-secondary">Back to Sales History</a>
+
+@section Scripts {
+    <script>
+        document.getElementById('quantity').addEventListener('input', function () {
+            var quantity = this.value;
+            var productId = document.getElementById('productId').value;
+            var product = @Html.Raw(Json.Serialize(Model.Products));
+
+            // Find selected product and calculate total
+            var selectedProduct = product.find(p => p.Id == productId);
+            if (selectedProduct) {
+                var Amount = quantity * selectedProduct.Price;
+                document.getElementById('Amount').value = Amount.toFixed(0); // Removes decimal
+            }
+        });
+    </script>
+}

@@ -1,0 +1,48 @@
+ @page
+@model InventoryManagementSystem.Pages.Sales.SalesHistoryModel
+
+@{
+    ViewData["Title"] = "Sales History";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-page="Index" class="btn btn-primary">Back to Sales</a>
+</p>
+
+<p>Total Sales Amount: @Model.FormattedTotalSalesAmount</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Amount</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var sale in Model.Sales)
+    {
+        <tr>
+            <td>@sale.Date.ToString("d")</td>
+            <td>@sale.Product?.Name</td>
+            <td>@sale.Quantity</td>
+            <td>@sale.TotalAmount.ToString("KSh #,0")</td>
+            <td>
+                <a asp-page="./EditSale" asp-route-id="@sale.Id" class="btn btn-warning">Edit</a>
+            </td>
+            <td>
+                <a asp-page="./DeleteSale" asp-route-id="@sale.Id" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+
+
+
